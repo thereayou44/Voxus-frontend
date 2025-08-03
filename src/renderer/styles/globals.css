@@ -2,27 +2,260 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --pastel-blue: #dbeafe;
-  --pastel-blue-light: #f0f6ff;
-  --pastel-purple: #b4aee8;
-  --pastel-purple-dark: #7c7bad;
-  --pastel-green: #b8e0d2;
-  --pastel-yellow: #fff5ba;
-  --pastel-red: #ffb3b3;
+/* Базовые стили */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background-primary text-text-primary;
+  }
+
+  /* Убираем outline для всех элементов по умолчанию */
+  *:focus {
+    outline: none;
+  }
+
+  /* Добавляем кастомный focus ring только для интерактивных элементов */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    @apply ring-2 ring-accent-primary/50 ring-offset-2 ring-offset-background-primary;
+  }
 }
 
-.bg-pastel-blue { background-color: var(--pastel-blue); }
-.bg-pastel-blue-light { background-color: var(--pastel-blue-light); }
-.bg-pastel-purple { background-color: var(--pastel-purple); }
-.bg-pastel-purple-dark { background-color: var(--pastel-purple-dark); }
-.bg-pastel-green { background-color: var(--pastel-green); }
-.bg-pastel-yellow { background-color: var(--pastel-yellow); }
-.bg-pastel-red { background-color: var(--pastel-red); }
-.text-pastel-purple { color: var(--pastel-purple); }
-.text-pastel-red { color: var(--pastel-red); }
+/* Компоненты */
+@layer components {
+  /* Кастомный скроллбар */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.border.light') transparent;
+  }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--pastel-blue);
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-border-light rounded-full;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-text-muted;
+  }
+
+  /* Стеклянный эффект */
+  .glass-morphism {
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Градиентный текст */
+  .text-gradient {
+    @apply bg-gradient-to-r from-accent-pastel-purple to-accent-pastel-blue;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Кнопка с градиентом */
+  .btn-gradient {
+    @apply bg-gradient-to-r from-accent-pastel-purple to-accent-pastel-blue;
+    @apply hover:shadow-lg hover:shadow-accent-pastel-purple/25;
+    @apply transition-all duration-200;
+  }
+
+  /* Анимированный фон */
+  .animated-gradient {
+    background: linear-gradient(
+      -45deg,
+      theme('colors.accent.pastel.purple'),
+      theme('colors.accent.pastel.blue'),
+      theme('colors.accent.pastel.pink'),
+      theme('colors.accent.pastel.green')
+    );
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  /* Плавающие частицы */
+  .floating {
+    animation: floating 6s ease-in-out infinite;
+  }
+
+  @keyframes floating {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  /* Пульсация */
+  .pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Появление элементов */
+  .fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Slide анимации */
+  .slide-in-left {
+    animation: slideInLeft 0.3s ease-out;
+  }
+
+  @keyframes slideInLeft {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  /* Hover эффект для карточек */
+  .card-hover {
+    @apply transition-all duration-200;
+    @apply hover:bg-background-hover hover:shadow-lg hover:shadow-black/10;
+    @apply hover:border-border-light;
+  }
+
+  /* Статус индикаторы */
+  .status-indicator {
+    @apply w-3 h-3 rounded-full;
+    @apply border-2 border-background-secondary;
+  }
+
+  .status-online {
+    @apply bg-status-online;
+  }
+
+  .status-idle {
+    @apply bg-status-idle;
+  }
+
+  .status-dnd {
+    @apply bg-status-dnd;
+  }
+
+  .status-offline {
+    @apply bg-status-offline;
+  }
+}
+
+/* Утилиты */
+@layer utilities {
+  /* Текстовые утилиты */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Отключение выделения текста */
+  .no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+
+  /* Перетаскивание окна (для title bar) */
+  .drag-region {
+    -webkit-app-region: drag;
+  }
+
+  .no-drag {
+    -webkit-app-region: no-drag;
+  }
+
+  /* Размытие фона */
+  .backdrop-blur-xs {
+    backdrop-filter: blur(2px);
+  }
+
+  /* Кастомные тени */
+  .shadow-glow {
+    box-shadow: 0 0 20px rgba(183, 148, 244, 0.5);
+  }
+
+  /* Анимация загрузки */
+  .loading-dots::after {
+    content: '';
+    animation: dots 1.5s steps(5, end) infinite;
+  }
+
+  @keyframes dots {
+    0%, 20% {
+      content: '.';
+    }
+    40% {
+      content: '..';
+    }
+    60% {
+      content: '...';
+    }
+    80%, 100% {
+      content: '';
+    }
+  }
+}
+
+/* Переопределение стилей для Electron */
+:root {
+  /* Убираем выделение при перетаскивании */
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
+/* Фикс для правильного отображения в Electron */
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Анимация при загрузке */
+.app-loading {
+  opacity: 0;
+  animation: appLoad 0.5s ease-out forwards;
+}
+
+@keyframes appLoad {
+  to {
+    opacity: 1;
+  }
 }
